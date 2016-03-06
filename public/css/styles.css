@@ -1,0 +1,12 @@
+body{
+	margin-top: 100px;
+}
+.signup-form{
+	margin-bottom: 10px;
+}
+#email-available{
+	display: none;
+}
+#email-unavailable{
+    display: none;
+}

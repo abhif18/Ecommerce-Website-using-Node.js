@@ -1,0 +1,29 @@
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			
+			</button>
+			<a class="navbar-brand" href="#">Project name</a>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+					<% if(!user){ %>
+			<li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign Up/Login</a>
+			<ul class="dropdown-menu">
+				<li><a href="/signup">SignUp</a></li>
+				<li><a href="/login">Login</a></li>
+			</ul>
+			
+		</li>
+          <% }     else{ %>
+		<li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi <%= user.profile.name %> &nbsp;<span class="glyphicon glyphicon-cog"></span></a>
+			<ul class="dropdown-menu">
+				<li><a href="/profile">Profile</a></li>
+				<li><a href="/logout">Logout</a></li>
+			</ul>
+			
+		</li>
+		<% } %>
+	</ul>
+    </div>	
+</nav>

@@ -1,0 +1,28 @@
+var mongoose = require(mongoose);
+var bcrypt = require(bcrypt-nodejs);
+var Schema = mongoose.Schema;
+
+var UserSchema = new Schema(
+profile: {
+name: {type: String,default: ''},
+picture: {type: String,default: ''}
+},
+email: {type: String,lowercase: true, unique: true},
+history: [{
+	date: Date,
+	paid: {type: Number,default: 0}
+	item: {type: Schema.Types.ObjectId, ref: }
+}]
+);
+
+UserSchema.pre('save',function(next) {
+	var user = this;
+	if(!user.isModified('password')) return next();
+	bcrypt.genSalt(10,function(err,salt){
+	if(err) next(err);
+	bcrypt.hash(user.password,salt,null,function(err,hash) {
+	if(err) next(err);
+	next();
+	});
+	});
+});
