@@ -1,3 +1,16 @@
 <% layout('layout') -%>
 
-Hello! <%= user.profile.name %>
+<div class="container">
+   <div class="row">
+     <div class="col-md-4 col-sm-6">
+     	<img src="<%= user.profile.picture %>" class="img-circle img-responsive img-center" alt="Profile Picture"><br>
+        <p>Name: <%= user.profile.name %></p><br>
+        <p>Email: <%= user.email %></p><br>
+        <% if(user.address === '' || typeof(user.address) === 'undefined') { %>
+          <p>Address: <span style="color:#c0392b;font-weight:bold;">No Address Added Yet</span></p>    
+        <%} else {%>	
+        <p>Address: <%= user.address %></p>
+        <% } %>
+     </div>   	
+   </div>
+</div>

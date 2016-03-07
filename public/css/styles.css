@@ -10,3 +10,6 @@ body{
 #email-unavailable{
     display: none;
 }
+#jumbotron-margin-top{
+	margin-top: -4%;
+}

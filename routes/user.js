@@ -46,7 +46,12 @@ router.post('/signup',function(req,res,next){
      	user.save(function(err,user){
      	if(err)
          return next(err);
-     return res.redirect('/');
+     //following is to redirect the user to the login page if signup is successful
+        req.logIn(user,function(err) {
+            //req.logIn(user,function(){}); saves the cookie in browser and session object on server
+            if(err) return next(err);
+            return res.redirect('/profile');
+        });
      });
   }
      });
@@ -56,6 +61,27 @@ router.post('/signup',function(req,res,next){
 router.get('/logout',function(req,res,next) {
     req.logout();
     res.redirect('/');
+});
+
+router.get('/edit-profile',function(req,res,next) {
+   //We will render the Edit-Profile page with flash message success
+   res.render('accounts/edit-profile',{message: req.flash('success')}); 
+});
+router.post('/edit-profile',function(req,res,next) {
+    User.findOne({ _id: req.user._id },function(err,user){
+          if(err) return next(err);
+//if input field with name=name is selected then change the user name
+          if(req.body.name) user.name = req.body.name;
+//if input field with name=address is selected then change the address
+        if(req.body.address) user.address = req.body.address;
+
+        //Now Save the Updated User Object in Database
+        user.save(function(err) {
+            if(err) return next(err);
+            req.flash('success','Successfully Updated the Profile!');
+            return res.redirect('/edit-profile');
+        });          
+    });
 });
 
 module.exports = router;
