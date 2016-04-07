@@ -6,14 +6,15 @@ var passportConfig = require('../config/passport');
 
 router.get('/login',function(req,res) {
 
-    if(req.user) return res.redirect('/');
-    res.render('accounts/login',{message: req.flash('LoginMessage')});
+    if(req.user) return res.redirect('/'); // on Successfull Authentication 
+    //authenticated user is stored in req.user
+    res.render('accounts/login',{ message: req.flash('LoginMessage') });
 });
 
 router.post('/login',passport.authenticate('local',{
-    successRedirect: '/profile',
-    failureRedirect: '/login',
-    failureFlash: true
+    successRedirect: '/profile',   //Route to take on Successfull Authentication
+    failureRedirect: '/login',     //Route to take if Authentication Fails
+    failureFlash: true             //To set Flash messages to true 
 }));
 
 router.get('/profile',function(req,res,next) {
@@ -38,7 +39,7 @@ router.post('/signup',function(req,res,next){
 
      User.findOne({email: req.body.email}, function(err,existinguser) {
      	if(existinguser){
-     		// console.log('User with email : '+req.body+' already exists');
+     		// console.log('User with email : '+req.body.email+' already exists');
      		req.flash('errors','User with that Email Already Exists');
      	return res.redirect('/signup');
      }
