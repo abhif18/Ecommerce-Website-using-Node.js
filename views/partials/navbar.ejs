@@ -39,9 +39,14 @@
 				<li><a href="/edit-profile">Edit Profile</a></li>
 				<li><a href="/logout">Logout</a></li>
 			</ul>
-			
 		</li>
 		<% } %>
+
+       <% if(user){ %>
+             <li><a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span><%= cart %></a></li>
+       	<%} else{%>
+             <li><a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+       	<% } %>	
 	</ul>
     </div>	
 </nav>

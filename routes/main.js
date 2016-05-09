@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var Product = require('../models/product');
+var Cart = require('../models/cart');
 
 Product.createMapping(function(err,mapping) {
 	if(err){
@@ -23,6 +24,29 @@ console.log('Indexed '+count+' documents');
 });
 stream.on('error',function(err){
 	console.log(err);
+});
+
+router.post('/product/:product_id',function(req,res,next){
+	Cart.findOne({ owner : req.user._id }, function(err,cart){
+		cart.items.push({
+			items : req.body.product_id,
+			price : parseFloat(req.body.priceValue),
+			quantity : parseInt(req.body.quantity)
+		});
+       cart.total = (cart.total + parseFloat(req.body.priceValue)).toFixed(2);
+       cart.save(function(err){
+         if(err) return next(err);
+         return res.redirect('/cart');
+       });
+	});
+});
+router.get('/cart',function(req,res,next){
+	Cart.findOne({ owner : req.user._id }).
+	populate('items.item').
+	exec(function(err,foundCart){
+		if(err) return next(err);
+		res.render('main/cart',{ foundCart: foundCart });
+	});
 });
 
 function paginate(req,res,next){

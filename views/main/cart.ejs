@@ -1,0 +1,28 @@
+<% layout('layout') %>
+<h1>Shopping Cart</h1>
+<div class="container">
+	<div class="row">
+		<div class="col=lg-6">
+			<% for(var i=0;i<foundCart.length;i++){ %>
+            <div class="list-group">
+            <span class="list-group-item">
+               <div class="row">
+                  <div class="col-md-3">
+                  <span><img class="cart_image" src="<%= foundCart.items[i].item.image %>"></img></span>
+                  </div>
+                  <div class="col-md-6">
+                   <p class="list-group-item-heading"><%= foundCart.items[i].item.name %></p>
+                  </div>
+                  <div class="col-md-3">
+                   <p><%= foundCart.items[i].quantity %></p>
+                   <p><%= foundCart.items[i].price %></p>
+                  </div>
+               </div>
+            </span>
+            </div>
+		    <% } %>		
+		</div>
+		<div class="3"></div>
+		<div class="3"></div>
+	</div>
+</div>

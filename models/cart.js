@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var cartSchema = new Schema({
-	owner: { type:Scehma.Types.ObjectId, ref: 'User'},
+	owner: { type:Schema.Types.ObjectId, ref: 'User'},
 	total: {type: Number, default: 0},
 	items: [{
 		item: { type:Schema.Types.ObjectId, ref: 'Product' },

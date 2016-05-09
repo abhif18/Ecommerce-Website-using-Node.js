@@ -15,6 +15,8 @@ var mongoStore = require('connect-mongo/es5')(session);//To Store Session on Ser
 
 var passport = require('passport');
 
+var cartLengthMiddleware = require('./middlewares/middlewares');
+
 var app = express();//app refers to express object
 
 mongoose.connect(secret.database,function(err) {
@@ -49,10 +51,15 @@ app.use(passport.initialize());
  restored in the correct order */
 app.use(passport.session());
 
-app.use(function(req,res,next) {
+app.use(function(req,res,next) //middleware are functions that help in 
+	//handeling requests so app.use(function(req,res,next){}); 
+	//that is why there are three parameters to a middleware function.
+{
 	res.locals.user = req.user;// So that Every Route has a User Object
 	next();
 });
+
+app.use(cartLengthMiddleware);//
 
 app.use(function(req,res,next) {
 	Category.find({},function(err,categories) {

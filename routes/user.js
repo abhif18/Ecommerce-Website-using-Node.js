@@ -2,6 +2,8 @@ var router = require('express').Router();
 var User = require('../models/user');
 var passport = require('passport');
 var passportConfig = require('../config/passport');
+var async = require('async');
+var Cart = require('../models/cart');
 
 
 router.get('/login',function(req,res) {
@@ -31,32 +33,43 @@ router.get('/signup',function(req,res,next) {
 });
 
 router.post('/signup',function(req,res,next){
-	console.log('received request');
-	var user = new User();
+
+    async.waterfall([
+
+       function(callback){
+        console.log('received request');
+    var user = new User();
      user.profile.name = req.body.name;
      user.password = req.body.password;
      user.email = req.body.email;
 
      User.findOne({email: req.body.email}, function(err,existinguser) {
-     	if(existinguser){
-     		// console.log('User with email : '+req.body.email+' already exists');
-     		req.flash('errors','User with that Email Already Exists');
-     	return res.redirect('/signup');
+        if(existinguser){
+            // console.log('User with email : '+req.body.email+' already exists');
+            req.flash('errors','User with that Email Already Exists');
+        return res.redirect('/signup');
      }
         else{
-     	user.save(function(err,user){
-     	if(err)
+        user.save(function(err,user){
+        if(err)
          return next(err);
-     //following is to redirect the user to the login page if signup is successful
-        req.logIn(user,function(err) {
-            //req.logIn(user,function(){}); saves the cookie in browser and session object on server
-            if(err) return next(err);
-            return res.redirect('/profile');
-        });
+     callback(null,user);
      });
   }
      });
-
+       },
+       function(user){
+          var cart = new Cart();
+          cart.owner = user._id;
+          cart.save(function(err,cart){
+            if(err) return next(err);
+            req.logIn(user,function(err){
+                if(err) return next(err);
+                res.redirect('/profile');
+            });
+          });
+       }
+        ]);
 });
 
 router.get('/logout',function(req,res,next) {
